@@ -15,10 +15,11 @@ for phase in phases:
         videos = os.listdir(os.path.join(path, subject))
         for video in videos:
             videoPath = os.path.join(path, subject, video, os.listdir(os.path.join(path, subject, video))[0])
+            videoPathdf= os.path.join(path, subject, video)
             videoPathFrames = '/'.join(videoPath.split('.')[0].split('/')[:-1]).replace(phase, phase + 'Frames')
             os.makedirs(videoPathFrames, exist_ok=True)
-            
-            df = df.append({'path' : videoPath},ignore_index=True)
+            print(videoPathdf)
+            df = df.append({'path' : videoPathdf},ignore_index=True)
             df.to_csv("/content/ResNet-TCN/labels_daisee.csv")
 
             capture = cv2.VideoCapture(videoPath)
