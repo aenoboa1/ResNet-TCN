@@ -1,11 +1,15 @@
 import os
 import cv2
+import pandas as pd
 
 phases = ['Train', 'Test', 'Validation']
-for phase in phases:
-    path = os.path.join('/path/to/video/files/', phase)
-    subjects = os.listdir(path)
 
+df = pd.DataFrame()
+
+
+for phase in phases:
+    path = os.path.join('/content/DAiSEE2/DAiSEE/DataSet/', phase)
+    subjects = os.listdir(path)
     for subject in subjects:
         print(phase, subject, flush=True)
         videos = os.listdir(os.path.join(path, subject))
@@ -13,6 +17,9 @@ for phase in phases:
             videoPath = os.path.join(path, subject, video, os.listdir(os.path.join(path, subject, video))[0])
             videoPathFrames = '/'.join(videoPath.split('.')[0].split('/')[:-1]).replace(phase, phase + 'Frames')
             os.makedirs(videoPathFrames, exist_ok=True)
+            
+            df = df.append({'path' : videoPath},ignore_index=True)
+            df.to_csv("/content/ResNet-TCN/labels_daisee.csv")
 
             capture = cv2.VideoCapture(videoPath)
             frame_count = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
